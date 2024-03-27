@@ -1,21 +1,29 @@
+import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Single from "./pages/Single";
+import Write from "./pages/Write";
+
 const App = () => {
+
+  const path = useLocation().pathname;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {path === "/register" || path === "/login" ? null : <Navbar />}
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/register" element={<Register />} />
+        <Route exact path="/write" element={<Write />} />
+        <Route exact path="/post/:id" element={<Single />} />
+      </Routes>
+      {path === "/register" || path === "/login" ? null : <Footer />}
+    </>
   );
 }
 
