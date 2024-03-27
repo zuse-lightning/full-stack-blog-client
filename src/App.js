@@ -8,22 +8,26 @@ import Register from "./pages/Register";
 import Single from "./pages/Single";
 import Write from "./pages/Write";
 
+import "./style.scss";
+
 const App = () => {
 
   const path = useLocation().pathname;
 
   return (
-    <>
-      {path === "/register" || path === "/login" ? null : <Navbar />}
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/register" element={<Register />} />
-        <Route exact path="/write" element={<Write />} />
-        <Route exact path="/post/:id" element={<Single />} />
-      </Routes>
-      {path === "/register" || path === "/login" ? null : <Footer />}
-    </>
+    <div id="app">
+      <div className="container">
+        {path === "/register" || path === "/login" ? null : <Navbar />}
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/register" element={<Register />} />
+          <Route exact path="/write" element={<Write />} />
+          <Route exact path="/post/:id" element={<Single />} />
+        </Routes>
+        {path === "/register" || path === "/login" ? null : <Footer />}
+      </div>
+    </div>
   );
 }
 
