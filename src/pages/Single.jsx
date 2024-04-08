@@ -1,35 +1,62 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 import Edit from "../img/edit.png";
 import Delete from "../img/delete.png";
 import Menu from "../components/Menu";
+import axios from "axios";
+import moment from "moment";
 
 const Single = () => {
+
+    const [post, setPost] = useState({});
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const postId = location.pathname.split("/")[2];
+    const { currentUser } = useContext(AuthContext);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get(`/posts/${postId}`);
+                setPost(res.data);
+                console.log(res.data);
+            } catch(err) {
+                console.log(err);
+            }
+        }
+        fetchData();
+    }, [postId]);
+
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`/posts/${postId}`);
+            navigate("/");
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return (
         <div className="single">
             <div className="content">
-                <img src="https://picsum.photos/200" alt="" />
+                <img src={post?.img} alt="" />
                 <div className="user">
-                    <img src="https://picsum.photos/200" alt="" />
+                    {post.userImg ? <img src={post.userImg} alt="" /> : null}
                     <div className="info">
-                        <span>Spicy Crispy Chicken Melt Johnson</span>
-                        <p>Posted 2 days ago</p>
+                        <span>{post.username}</span>
+                        <p>Posted {moment(post.date).fromNow()}</p>
                     </div>
-                    <div className="edit">
+                    {currentUser.username === post.username ? (<div className="edit">
                         <Link to={`/write?edit=2`}>
                             <img src={Edit} alt="" />
                         </Link>
-                        <img src={Delete} alt="" />
-                    </div>
+                        <img onClick={handleDelete} src={Delete} alt="" />
+                    </div>) : null}
                 </div>
-                <h1>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</h1>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo eveniet eligendi ex quasi, culpa atque in harum dolore corporis architecto repellendus repellat excepturi hic dolores aperiam, facere provident similique voluptas.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus commodi, labore repellendus optio illo fugit, magni error obcaecati maxime ea alias reiciendis nulla laboriosam! Suscipit consequatur doloribus accusantium itaque ipsam! 
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit quo maxime optio aut ab autem sequi, illo, esse dolor molestiae dolore eveniet. Quaerat dolore error ipsa. Atque commodi in placeat.
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Incidunt, accusantium aspernatur vitae tempora ratione, explicabo asperiores, temporibus eius ullam quaerat commodi totam reiciendis. Id assumenda cum blanditiis commodi harum fuga.
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellendus eaque id numquam omnis dignissimos. Ratione fugiat minus saepe maiores consequatur esse dolor nobis quos repellat earum sequi, magni quidem. Modi.
-                </p>
+                <h1>{post.title}</h1>
+                {post.desc}
             </div>
             <Menu />
         </div>
