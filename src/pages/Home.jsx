@@ -6,19 +6,24 @@ const Home = () => {
 
     const [posts, setPosts] = useState([]);
 
-    const category = useLocation().search;
+    const cat = useLocation().search;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`/posts${category}`);
+                const res = await axios.get(`/posts${cat}`);
                 setPosts(res.data);
             } catch(err) {
                 console.log(err);
             }
         }
         fetchData();
-    }, [category]);
+    }, [cat]);
+
+    const getText = (html) => {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        return doc.body.textContent;
+    }
 
     return (
         <div className="home">
@@ -26,13 +31,13 @@ const Home = () => {
                 {posts.map(post => (
                     <div className="post" key={posts.id}>
                         <div className="img">
-                            <img src={post.img} alt="" />
+                            <img src={`../upload/${post.img}`} alt="" />
                         </div>
                         <div className="content">
                             <Link className="link" to={`/post/${post.id}`}>
-                                <h1>{post.title}</h1>
+                                <h1>{getText(post.title)}</h1>
                             </Link>
-                            <p>{post.desc}</p>
+                            <p>{getText(post.desc)}</p>
                             <Link className="link" to={`/post/${post.id}`}>
                                 <button>Read More</button>
                             </Link> 
