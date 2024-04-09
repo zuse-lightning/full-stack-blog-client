@@ -1,33 +1,21 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
+import axios from "axios";
 
-const Menu = () => {
+const Menu = ({category}) => {
 
-    const posts = [
-        {
-            id: 1,
-            title: "Lorem ipsum dolor sit amet.",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, molestie ipsum et, eleifend tellus. Proin sodales, nunc vitae gravida ultrices, nisl velit ultricies metus, et tincidunt nunc turpis vel nunc. Donec nec nunc non ligula auctor tincidunt. Proin nec mi nec odio vehicula vehicula. Nullam nec magna auctor, ultricies nunc nec, aliquet nunc.",
-            img: "https://picsum.photos/200",
-        },
-        {
-            id: 2,
-            title: "Lorem ipsum dolor sit amet.",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, molestie ipsum et, eleifend tellus. Proin sodales, nunc vitae gravida ultrices, nisl velit ultricies metus, et tincidunt nunc turpis vel nunc. Donec nec nunc non ligula auctor tincidunt. Proin nec mi nec odio vehicula vehicula. Nullam nec magna auctor, ultricies nunc nec, aliquet nunc.",
-            img: "https://picsum.photos/200",
-        },
-        {
-            id: 3,
-            title: "Lorem ipsum dolor sit amet.",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, molestie ipsum et, eleifend tellus. Proin sodales, nunc vitae gravida ultrices, nisl velit ultricies metus, et tincidunt nunc turpis vel nunc. Donec nec nunc non ligula auctor tincidunt. Proin nec mi nec odio vehicula vehicula. Nullam nec magna auctor, ultricies nunc nec, aliquet nunc.",
-            img: "https://picsum.photos/200",
-        },
-        {
-            id: 4,
-            title: "Lorem ipsum dolor sit amet.",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, molestie ipsum et, eleifend tellus. Proin sodales, nunc vitae gravida ultrices, nisl velit ultricies metus, et tincidunt nunc turpis vel nunc. Donec nec nunc non ligula auctor tincidunt. Proin nec mi nec odio vehicula vehicula. Nullam nec magna auctor, ultricies nunc nec, aliquet nunc.",
-            img: "https://picsum.photos/200",
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get(`/posts/?cat=${category}`);
+                setPosts(res.data);
+            } catch(err) {
+                console.log(err);
+            }
         }
-    ];
+        fetchData();
+    }, [category]);
 
     return (
         <div className="menu">

@@ -21,7 +21,6 @@ const Single = () => {
             try {
                 const res = await axios.get(`/posts/${postId}`);
                 setPost(res.data);
-                console.log(res.data);
             } catch(err) {
                 console.log(err);
             }
@@ -49,7 +48,7 @@ const Single = () => {
                         <p>Posted {moment(post.date).fromNow()}</p>
                     </div>
                     {currentUser.username === post.username ? (<div className="edit">
-                        <Link to={`/write?edit=2`}>
+                        <Link to={`/write?edit=2`} state={post}>
                             <img src={Edit} alt="" />
                         </Link>
                         <img onClick={handleDelete} src={Delete} alt="" />
@@ -58,7 +57,7 @@ const Single = () => {
                 <h1>{post.title}</h1>
                 {post.desc}
             </div>
-            <Menu />
+            <Menu category={post.cat} />
         </div>
     );
 };
